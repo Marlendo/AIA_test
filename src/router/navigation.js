@@ -1,0 +1,31 @@
+// RootNavigation.js
+
+import * as React from 'react';
+import AsyncStorage from '@react-native-community/async-storage';
+
+export const navigationRef = React.createRef();
+
+export function navigate(name, params) {
+    navigationRef.current?.navigate(name, params);
+}
+
+export function goBack() {
+    navigationRef.current?.goBack()
+}
+
+export function resetAll() {
+    AsyncStorage.removeItem('token')
+    navigationRef.current?.reset({
+        index: 0,
+        routes: [{ name: 'Login' }],
+    });
+}
+
+export function tabsNav(page) {
+    navigationRef.current?.reset({
+        index: 0,
+        routes: [{ name: 'page' }],
+    });
+}
+
+// add other navigation functions that you need and export them
