@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "android": "npx react-native run-android",
+    "android-prod": "npx react-native run-android --variant=release",
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
@@ -15,6 +16,9 @@
     "@react-navigation/material-bottom-tabs": "^5.2.9",
     "@react-navigation/native": "^5.5.0",
     "@react-navigation/stack": "^5.4.1",
+    "appcenter": "^3.0.3",
+    "appcenter-analytics": "^3.0.3",
+    "appcenter-crashes": "^3.0.3",
     "axios": "^0.19.2",
     "moment": "^2.26.0",
     "react": "16.11.0",
