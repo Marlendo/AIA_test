@@ -29,13 +29,24 @@ const Home = ({ navigation }) => {
             let newData = await getPublicPost(data.items)
             setData(newData)
             setPost(paginate(newData, page))
-            // action({
-            //     type: 'setPost',
-            //     data: newData
-            // })
         }
     }
 
+    // client side searching data
+    function doSearch(value) {
+        setPage(1)
+        let newPost = data.filter(function (rows) {
+            return rows.title.toLowerCase().indexOf(value.toLowerCase()) !== -1
+        });
+        setPost(newPost)
+    }
+    function clearSearch(){
+        setPage(1)
+        setSearchToogle(false)
+        setPost(paginate(data, 1))
+    }
+
+    // client side pagination data
     function doPaginate() {
         const getPaginate = paginate(data, page + 1);
         if (getPaginate.length !== 0) {
@@ -46,19 +57,17 @@ const Home = ({ navigation }) => {
     }
 
     // favorite management
-
     function isFavorite(payload) {
         let favorite = state.favorite;
         let getFavorite = favorite.filter(function (rows) {
             return rows.link === payload.link
         });
-        if(getFavorite.length !== 0){
+        if (getFavorite.length !== 0) {
             return true
         } else {
             return false
         }
     }
-
     function updateData(newFavorite) {
         action({
             type: 'setFavorite',
@@ -66,7 +75,6 @@ const Home = ({ navigation }) => {
         })
         AsyncStorage.setItem('favorite', JSON.stringify(newFavorite))
     }
-
     async function setFavorite(payload) {
         let favorite = state.favorite;
         if (isFavorite(payload)) {
@@ -80,7 +88,6 @@ const Home = ({ navigation }) => {
             updateData(newFavorite)
         }
     }
-
     const removeFavorite = (payload) => {
         let favorite = state.favorite;
         Alert.alert(
@@ -106,6 +113,7 @@ const Home = ({ navigation }) => {
             { cancelable: false }
         );
     }
+    // end of favorite management
 
     useEffect(() => {
         getData()
@@ -138,7 +146,10 @@ const Home = ({ navigation }) => {
                             onChangeText={(e) => {
                                 setSearch(e)
                                 if (e.length === 0) {
-                                    setSearchToogle(false)
+                                    alert('clear')
+                                    clearSearch()
+                                } else {
+                                    doSearch(e)
                                 }
                             }}
                             onBlur={() => {
@@ -174,7 +185,9 @@ const Home = ({ navigation }) => {
                             )}
                             onEndReachedThreshold={0.5}
                             onEndReached={() => {
-                                doPaginate()
+                                if(!searchToogle){
+                                    doPaginate()
+                                }
                             }}
                             initialNumToRender={4}
                             keyExtractor={(item, index) => index.toString()}

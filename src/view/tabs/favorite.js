@@ -1,16 +1,74 @@
-import React, { useState, useEffect } from 'react';
-import { FlatList } from 'react-native';
+import React from 'react';
+import { FlatList, Alert } from 'react-native';
 import { useTracked } from '../../service';
-import { flickrApi } from '../../service/api';
 import { MainHeaderContainer, Space } from '../../components/containers';
 import { colors } from '../../styles';
 import { PostCard } from '../../components/card';
-import { PostCardSkelleton } from '../../components/skelleton';
 import { Appbar } from 'react-native-paper';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const Home = ({ navigation }) => {
 
     const [state, action] = useTracked();
+    
+     // favorite management
+     function isFavorite(payload) {
+        let favorite = state.favorite;
+        let getFavorite = favorite.filter(function (rows) {
+            return rows.link === payload.link
+        });
+        if(getFavorite.length !== 0){
+            return true
+        } else {
+            return false
+        }
+    }
+    function updateData(newFavorite) {
+        action({
+            type: 'setFavorite',
+            data: newFavorite
+        })
+        AsyncStorage.setItem('favorite', JSON.stringify(newFavorite))
+    }
+    async function setFavorite(payload) {
+        let favorite = state.favorite;
+        if (isFavorite(payload)) {
+            removeFavorite(payload)
+        } else {
+            let newFavorite = [...favorite, payload];
+            action({
+                type: 'successAlert',
+                message: 'Success Added'
+            })
+            updateData(newFavorite)
+        }
+    }
+    const removeFavorite = (payload) => {
+        let favorite = state.favorite;
+        Alert.alert(
+            "Alert",
+            "Are You Sure Want to Remove " + payload.title + " From Favorite",
+            [
+                {
+                    text: "Cancel",
+                    onPress: () => {
+                        console.log(cancel)
+                    },
+                    style: "cancel"
+                },
+                {
+                    text: "OK", onPress: () => {
+                        let newFavorite = favorite.filter(function (rows) {
+                            return rows.link !== payload.link
+                        });
+                        updateData(newFavorite)
+                    }
+                }
+            ],
+            { cancelable: false }
+        );
+    }
+    // end of favorite management
 
     return (
         <MainHeaderContainer
@@ -31,11 +89,15 @@ const Home = ({ navigation }) => {
                 renderItem={({ item, index }) => (
                     <PostCard
                         index={index}
+                        favorite={isFavorite(item)}
                         payload={item}
                         onClick={() => {
                             navigation.navigate('DetailPost', {
                                 data: item
                             });
+                        }}
+                        setFavorite={() => {
+                            setFavorite(item)
                         }}
                     />
                 )}
