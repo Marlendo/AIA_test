@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { colors } from '../styles';
 import { useTracked } from '../service';
 import { ActivityIndicator } from 'react-native-paper';
@@ -13,6 +13,14 @@ export const Activity = (props) => {
     const snackbarMessage = state.alert.message;
     const loading = state.loading;
 
+    useEffect(()=> {
+        if(snackbarActive){
+            setTimeout(function(){ 
+                action({ type: 'closeAlert' })
+            }, 3000);
+        }        
+    }, [snackbarActive])
+
     return (
         <>
             <SnackBar
@@ -21,7 +29,7 @@ export const Activity = (props) => {
                 actionHandler={() => {
                     action({ type: 'closeAlert' })
                 }}
-                backgroundColor={snackbarType === 'Error' ? colors.danger : snackbarType === 'Warning' ? colors.warning : colors.primary}
+                backgroundColor={snackbarType === 'Error' ? colors.danger : snackbarType === 'Warning' ? colors.warning : colors.secondary}
                 messageColor={colors.light}
                 position={'bottom'}
                 actionText="Ok"

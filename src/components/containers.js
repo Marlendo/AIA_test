@@ -44,7 +44,9 @@ export const MainHeaderContainer = (props) => {
                         icon="bell"
                         color={colors.light}
                         onPress={() => {
-                            alert('sip')
+                            var string = "budi makan bola";
+                            var substring = "budi makas";
+                            console.log(string.indexOf(substring) !== -1);
                         }} />
                     {
                         props.right

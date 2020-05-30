@@ -19,12 +19,14 @@ function MyTabs() {
   const [bar, setBar] = useState(true)
 
   async function getFavorite() {
-    const data = await AsyncStorage.getItem('favorite')
-    if (data) {
+    const data = JSON.parse(await AsyncStorage.getItem('favorite'))
+    if (data) {      
       action({
         type: 'setFavorite',
         data: data
       })
+    } else {
+      await AsyncStorage.removeItem('favorite')
     }
   }
 

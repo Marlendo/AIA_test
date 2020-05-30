@@ -11,6 +11,7 @@ export const initialState = {
       message: '',      
     },
     loading: false,
+    post: [],
     favorite: []
   };
 
@@ -21,6 +22,7 @@ export const reducer = (state, action) => {
       case 'closeAlert': return { ...state, alert: {...state.alert, active: false} };
       case 'loadStart': return { ...state, loading: true };
       case 'loadStop': return { ...state, loading: false };            
+      case 'setPost': return { ...state, post: action.data };            
       case 'setFavorite': return { ...state, favorite: action.data };            
       default: throw new Error(`unknown action type: ${action.type}`);
     }

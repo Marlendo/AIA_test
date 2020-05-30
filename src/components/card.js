@@ -1,24 +1,74 @@
 import React from 'react';
 import { useTracked } from '../service';
-import { TouchableOpacity, View, Text, Image } from 'react-native';
+import { TouchableOpacity, View, Text, Image, Alert } from 'react-native';
 import { textStyle, colors } from '../styles';
 import { IconButton, Card } from 'react-native-paper';
 import { Space } from './containers';
 import moment from 'moment';
+import AsyncStorage from '@react-native-community/async-storage';
 
-export const PostCard = ({
-    title,
-    // link,
-    image,
-    date,
-    // desc,
-    author,
-    // tags,
-    favorite,
-    onClick
-}) => {
+export const PostCard = ({ payload, onClick, setFavorite, favorite }) => {
+
+    const title = payload.title;
+    const image = payload.media.m;
+    const date = payload.published;
+    const author = payload.author;    
 
     const [state, action] = useTracked();
+
+    // function updateData(newFavorite, newPost) {
+    //     action({
+    //         type: 'setFavorite',
+    //         data: newFavorite
+    //     })
+    //     action({
+    //         type: 'setPost',
+    //         data: newPost
+    //     })
+    //     AsyncStorage.setItem('favorite', JSON.stringify(newFavorite))
+    // }
+
+    // async function setFavorite() {
+    //     let post = [...state.post];
+    //     let favorite = state.favorite;
+    //     if (payload.favorite) {
+    //         removeFavorite(favorite, post)
+    //     } else {
+    //         let newFavorite = [...favorite, payload];
+    //         post[index].favorite = true;
+    //         action({
+    //             type: 'successAlert',
+    //             message: 'Success Added'
+    //         })
+    //         updateData(newFavorite, post)
+    //     }
+    // }
+
+    // const removeFavorite = (favorite, post) => {
+    //     Alert.alert(
+    //         "Alert",
+    //         "Are You Sure Want to Remove " + title + " From Favorite",
+    //         [
+    //             {
+    //                 text: "Cancel",
+    //                 onPress: () => {
+    //                     console.log(cancel)
+    //                 },
+    //                 style: "cancel"
+    //             },
+    //             {
+    //                 text: "OK", onPress: () => {
+    //                     let newFavorite = favorite.filter(function (rows) {
+    //                         return rows.link !== payload.link
+    //                     });
+    //                     post[index].favorite = false
+    //                     updateData(newFavorite, post)
+    //                 }
+    //             }
+    //         ],
+    //         { cancelable: false }
+    //     );
+    // }
 
     return (
         <TouchableOpacity
@@ -52,7 +102,9 @@ export const PostCard = ({
                             style={{
                                 margin: 0
                             }}
-                            onPress={() => alert('Pressed')}
+                            onPress={() => {
+                                setFavorite()
+                            }}
                         />
                     </View>
                     <Text numberOfLines={1} style={[
