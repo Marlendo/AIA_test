@@ -149,7 +149,7 @@ const Home = ({ navigation }) => {
                 ) : (
                         null
                     )
-            }            
+            }
             {
                 load ? (
                     <PostCardSkelleton load={load} />

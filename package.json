@@ -8,6 +8,7 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
+    "spec": "jest --testPathPattern helpers.spec.js --testPathIgnorePatterns node_modules",
     "lint": "eslint ."
   },
   "dependencies": {
@@ -50,6 +51,11 @@
     "react-test-renderer": "16.11.0"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "react-native",
+    "collectCoverage": true,
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "spec"
+    ]
   }
 }

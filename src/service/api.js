@@ -1,16 +1,8 @@
 import axios from 'axios';
-import AsyncStorage from '@react-native-community/async-storage';
 import { ENV } from '../../env';
 
 const header = {
     "Content-Type": "application/json",
-}
-
-async function getAuthHeader() {
-    return {
-        "Content-Type": "application/json",
-        "Authorization": "beAuty " + await AsyncStorage.getItem('token')
-    }
 }
 
 const host = ENV.host;
