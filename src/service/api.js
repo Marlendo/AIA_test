@@ -22,8 +22,15 @@ const getPayload = async (name, data) => {
                 headers: header,
                 method: 'get',
                 url: host + '/photos_public.gne?format=json',
-                data
-            }       
+                data: null
+            }
+        case 'publicTag':
+            return {
+                headers: header,
+                method: 'get',
+                url: host + '/photos_public.gne?format=json&tags=' + data,
+                data: null
+            }
         default:
             throw 'Error api not found'
     }
@@ -43,17 +50,25 @@ async function request({
     return res.data;
 }
 
-function parseData(data){
-    function jsonFlickrFeed(rsp) {
-        return rsp
+function parseData(data) {
+    try {
+        const getData = data.toString().substring(15, data.toString().length - 1)
+        const key = data.toString().substring(0, 14);
+        if(key === 'jsonFlickrFeed'){
+            return JSON.parse(getData)
+        } else {
+            throw({
+                message: 'deference key'
+            })
+        }        
+    } catch (error) {        
+        alert(error.message)
     }
-    eval("var fn = function(){ return " + data.toString() + " }");
-    return fn();
-}  
+}
 
 export const flickrApi = async (name, data) => {
     const payload = await getPayload(name, data)
-    const jsonFlickrApi = await request(payload)    
-    const response = parseData(jsonFlickrApi)  
+    const jsonFlickrApi = await request(payload)
+    const response = parseData(jsonFlickrApi)
     return response
 }

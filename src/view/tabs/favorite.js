@@ -122,7 +122,6 @@ const Home = ({ navigation }) => {
                         null
                     )
             }
-            <Space size={20} />
             {
                 state.favorite.length === 0 ? (
                     <FavoriteNull />

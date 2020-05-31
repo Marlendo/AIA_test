@@ -11,7 +11,10 @@ import { paginate } from '../../helper/paginate';
 import AsyncStorage from '@react-native-community/async-storage';
 import { SearchComponent } from '../../components/input';
 
-const Home = ({ navigation }) => {
+const TagsPage = ({ navigation, route: {
+    params: {
+        tag
+    } } }) => {
 
     const [state, action] = useTracked();
     const [load, setLoad] = useState(false);
@@ -23,7 +26,7 @@ const Home = ({ navigation }) => {
 
     async function getData() {
         setLoad(true)
-        const data = await flickrApi('public')
+        const data = await flickrApi('publicTag', tag)
         if (data) {
             setLoad(false)
             setData(data.items)
@@ -121,7 +124,8 @@ const Home = ({ navigation }) => {
     return (
         <MainHeaderContainer
             barColor={colors.primaryD}
-            title={'Public Post'}
+            title={tag}
+            back
             right={(
                 <Appbar.Action
                     icon="magnify"
@@ -149,7 +153,7 @@ const Home = ({ navigation }) => {
                 ) : (
                         null
                     )
-            }            
+            }
             {
                 load ? (
                     <PostCardSkelleton load={load} />
@@ -186,4 +190,4 @@ const Home = ({ navigation }) => {
     );
 };
 
-export default Home;
+export default TagsPage;

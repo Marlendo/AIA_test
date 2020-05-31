@@ -205,7 +205,9 @@ const DetailPost = ({ navigation, route: {
                                         margin: 2
                                     }}
                                     onPress={() => {
-                                        console.log('Pressed')
+                                        navigation.navigate('TagsPage', {                            
+                                            tag: row
+                                        });
                                     }}>
                                     {
                                         row

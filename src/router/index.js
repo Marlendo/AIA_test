@@ -6,6 +6,7 @@ import MyTabs from './tabs';
 import DetailPost from '../view/pages/detailPost';
 import WebView from '../view/pages/webView';
 import NotifPage from '../view/pages/notification';
+import TagsPage from '../view/pages/tags';
 
 const Stack = createStackNavigator();
 
@@ -20,6 +21,7 @@ const MainRoot = () => {
           <Stack.Screen name="DetailPost" component={DetailPost} />         
           <Stack.Screen name="NotifPage" component={NotifPage} />         
           <Stack.Screen name="WebView" component={WebView} />         
+          <Stack.Screen name="TagsPage" component={TagsPage} />         
           <Stack.Screen name="Tabs" component={MyTabs} />         
         </Stack.Navigator>
       </NavigationContainer>

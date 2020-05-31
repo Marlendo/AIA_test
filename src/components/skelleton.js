@@ -84,6 +84,7 @@ export const PostCardSkelleton = (props) => {
 
     return (
         <View>
+            <Space size={20} />
             <PostCardSkelletonComponent load={props.load} />
             <PostCardSkelletonComponent load={props.load} />
         </View>

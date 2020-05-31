@@ -5,7 +5,7 @@ import { IconButton, Card } from 'react-native-paper';
 import { Space } from './containers';
 import moment from 'moment';
 
-export const PostCard = ({ payload, onClick, setFavorite, favorite }) => {
+export const PostCard = ({ payload, onClick, setFavorite, favorite, index }) => {
 
     const title = payload.title;
     const image = payload.media.m;
@@ -17,7 +17,8 @@ export const PostCard = ({ payload, onClick, setFavorite, favorite }) => {
             onPress={onClick}
             style={{
                 paddingHorizontal: 20,
-                paddingVertical: 5
+                paddingVertical: 5,
+                marginTop: index === 0 ? 20 : 0
             }}
         >
             <Card>
