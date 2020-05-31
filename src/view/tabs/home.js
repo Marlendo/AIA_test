@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { FlatList, View, Alert } from 'react-native';
+import { FlatList, Alert } from 'react-native';
 import { useTracked } from '../../service';
 import { flickrApi } from '../../service/api';
 import { MainHeaderContainer, Space } from '../../components/containers';
 import { colors } from '../../styles';
 import { PostCard } from '../../components/card';
 import { PostCardSkelleton } from '../../components/skelleton';
-import { Appbar, Searchbar } from 'react-native-paper';
-import { getPublicPost } from '../../helper/payload';
+import { Appbar } from 'react-native-paper';
 import { paginate } from '../../helper/paginate';
 import AsyncStorage from '@react-native-community/async-storage';
+import { SearchComponent } from '../../components/input';
 
 const Home = ({ navigation }) => {
 
@@ -26,9 +26,8 @@ const Home = ({ navigation }) => {
         const data = await flickrApi('public')
         if (data) {
             setLoad(false)
-            let newData = await getPublicPost(data.items)
-            setData(newData)
-            setPost(paginate(newData, page))
+            setData(data.items)
+            setPost(paginate(data.items, page))
         }
     }
 
@@ -40,7 +39,7 @@ const Home = ({ navigation }) => {
         });
         setPost(newPost)
     }
-    function clearSearch(){
+    function clearSearch() {
         setPage(1)
         setSearchToogle(false)
         setPost(paginate(data, 1))
@@ -134,29 +133,19 @@ const Home = ({ navigation }) => {
         >
             {
                 searchToogle ? (
-                    <View style={{
-                        width: '100%',
-                        position: 'absolute',
-                        zIndex: 3,
-                        padding: 0
-                    }}>
-                        <Searchbar
-                            autoFocus={searchToogle}
-                            placeholder="Search"
-                            onChangeText={(e) => {
-                                setSearch(e)
-                                if (e.length === 0) {
-                                    alert('clear')
-                                    clearSearch()
-                                } else {
-                                    doSearch(e)
-                                }
-                            }}
-                            onBlur={() => {
-                                setSearchToogle(false)
-                            }}
-                            value={search} />
-                    </View>
+                    <SearchComponent
+                        onChangeText={(e) => {
+                            setSearch(e)
+                            if (e.length === 0) {
+                                clearSearch()
+                            } else {
+                                doSearch(e)
+                            }
+                        }}
+                        onBlur={() => {
+                            setSearchToogle(false)
+                        }}
+                        value={search} />
                 ) : (
                         null
                     )
@@ -185,7 +174,7 @@ const Home = ({ navigation }) => {
                             )}
                             onEndReachedThreshold={0.5}
                             onEndReached={() => {
-                                if(!searchToogle){
+                                if (!searchToogle) {
                                     doPaginate()
                                 }
                             }}

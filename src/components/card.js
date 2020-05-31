@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, View, Text, Image } from 'react-native';
-import { textStyle, colors } from '../styles';
+import { textStyle, colors, containerStyle } from '../styles';
 import { IconButton, Card } from 'react-native-paper';
 import { Space } from './containers';
 import moment from 'moment';
@@ -30,13 +30,7 @@ export const PostCard = ({ payload, onClick, setFavorite, favorite }) => {
                 }} source={{ uri: image }} />
                 <Space size={10} />
                 <Card.Content>
-                    <View style={{
-                        position: 'absolute',
-                        backgroundColor: colors.lightL,
-                        borderRadius: 100,
-                        right: 10,
-                        top: -50
-                    }}>
+                    <View style={containerStyle.favorite}>
                         <IconButton
                             icon={favorite ? 'heart' : 'heart-outline'}
                             color={favorite ? colors.secondary : colors.grey}
@@ -99,6 +93,66 @@ export const LoginFirst = () => {
                         marginTop: 5
                     }
                 ]}>Login First</Text>
+            </View>
+        </View>
+    )
+}
+
+export const NotifNull = () => {
+
+    return (
+        <View style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center'
+        }}>
+            <Image
+                style={{
+                    height: 100,
+                    width: 100
+                }}
+                source={require('../../assets/images/notification.png')}
+            />
+            <View>
+                <Text style={[
+                    textStyle.title,
+                    {
+                        textAlign: 'center',
+                        color: colors.primaryD,
+                        fontSize: 30,
+                        marginTop: 5
+                    }
+                ]}>Notification Not Found</Text>
+            </View>
+        </View>
+    )
+}
+
+export const FavoriteNull = () => {
+
+    return (
+        <View style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center'
+        }}>
+            <Image
+                style={{
+                    height: 100,
+                    width: 100
+                }}
+                source={require('../../assets/images/heart.png')}
+            />
+            <View>
+                <Text style={[
+                    textStyle.title,
+                    {
+                        textAlign: 'center',
+                        color: colors.primaryD,
+                        fontSize: 30,
+                        marginTop: 5
+                    }
+                ]}>No Favorite Added</Text>
             </View>
         </View>
     )

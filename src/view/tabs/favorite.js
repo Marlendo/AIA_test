@@ -1,23 +1,43 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { FlatList, Alert } from 'react-native';
 import { useTracked } from '../../service';
 import { MainHeaderContainer, Space } from '../../components/containers';
 import { colors } from '../../styles';
-import { PostCard } from '../../components/card';
+import { PostCard, FavoriteNull } from '../../components/card';
 import { Appbar } from 'react-native-paper';
 import AsyncStorage from '@react-native-community/async-storage';
+import { SearchComponent } from '../../components/input';
 
 const Home = ({ navigation }) => {
 
     const [state, action] = useTracked();
-    
-     // favorite management
-     function isFavorite(payload) {
+    const [search, setSearch] = useState('');
+    const [searchToogle, setSearchToogle] = useState(false);
+    const [post, setPost] = useState([])
+
+    useEffect(() => {
+        setPost(state.favorite)
+    }, [])
+
+    // client side searching data
+    function doSearch(value) {
+        let newPost = state.favorite.filter(function (rows) {
+            return rows.title.toLowerCase().indexOf(value.toLowerCase()) !== -1
+        });
+        setPost(newPost)
+    }
+    function clearSearch() {
+        setSearchToogle(false)
+        setPost(state.favorite)
+    }
+
+    // favorite management
+    function isFavorite(payload) {
         let favorite = state.favorite;
         let getFavorite = favorite.filter(function (rows) {
             return rows.link === payload.link
         });
-        if(getFavorite.length !== 0){
+        if (getFavorite.length !== 0) {
             return true
         } else {
             return false
@@ -79,30 +99,55 @@ const Home = ({ navigation }) => {
                     icon="magnify"
                     color={colors.light}
                     onPress={() => {
-                        alert('sip')
+                        setSearchToogle(!searchToogle)
                     }} />
             )}
         >
+            {
+                searchToogle ? (
+                    <SearchComponent
+                        onChangeText={(e) => {
+                            setSearch(e)
+                            if (e.length === 0) {
+                                clearSearch()
+                            } else {
+                                doSearch(e)
+                            }
+                        }}
+                        onBlur={() => {
+                            setSearchToogle(false)
+                        }}
+                        value={search} />
+                ) : (
+                        null
+                    )
+            }
             <Space size={20} />
-            <FlatList
-                data={state.favorite}
-                renderItem={({ item, index }) => (
-                    <PostCard
-                        index={index}
-                        favorite={isFavorite(item)}
-                        payload={item}
-                        onClick={() => {
-                            navigation.navigate('DetailPost', {
-                                data: item
-                            });
-                        }}
-                        setFavorite={() => {
-                            setFavorite(item)
-                        }}
-                    />
-                )}
-                keyExtractor={(item, index) => index.toString()}
-            />
+            {
+                state.favorite.length === 0 ? (
+                    <FavoriteNull />
+                ) : (
+                        <FlatList
+                            data={search.length > 1 ? post : state.favorite}
+                            renderItem={({ item, index }) => (
+                                <PostCard
+                                    index={index}
+                                    favorite={isFavorite(item)}
+                                    payload={item}
+                                    onClick={() => {
+                                        navigation.navigate('DetailPost', {
+                                            data: item
+                                        });
+                                    }}
+                                    setFavorite={() => {
+                                        setFavorite(item)
+                                    }}
+                                />
+                            )}
+                            keyExtractor={(item, index) => index.toString()}
+                        />
+                    )
+            }
         </MainHeaderContainer>
     );
 };

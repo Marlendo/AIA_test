@@ -40,14 +40,18 @@ export const MainHeaderContainer = (props) => {
                         title={props.title ? props.title : 'Title Not Found'}
                         subtitle={props.subtitle ? props.subtitle : null}
                     />
-                    <Appbar.Action
-                        icon="bell"
-                        color={colors.light}
-                        onPress={() => {
-                            var string = "budi makan bola";
-                            var substring = "budi makas";
-                            console.log(string.indexOf(substring) !== -1);
-                        }} />
+                    {
+                        props.notif === false ? (
+                            null
+                        ) : (
+                                <Appbar.Action
+                                    icon="bell"
+                                    color={colors.light}
+                                    onPress={() => {
+                                        RootNavigation.navigate('NotifPage')
+                                    }} />
+                            )
+                    }
                     {
                         props.right
                     }
