@@ -7,7 +7,7 @@ api documentation = https://www.flickr.com/services/feeds/
 <p>Install Yarn to your machine https://classic.yarnpkg.com/en/docs/install</p>
 <p> <b>yarn install</b></p>
 <h4>Unit Testing using JEST</h4>
-<p>yarn test</p>
+<p>yarn spec</p>
 <h4>Running Development Build</h4>
 <p>yarn android</p>
 <h4>Running Production Build</h4>
