@@ -37,7 +37,7 @@ const PostCardSkelletonComponent = (props) => {
             </View>
             <View
                 onLayout={(event) => {
-                    setWidth(event.nativeEvent.layout.width)   
+                    setWidth(event.nativeEvent.layout.width)
                 }}
                 style={{
                     height: 200
@@ -45,7 +45,7 @@ const PostCardSkelletonComponent = (props) => {
                 <SkeletonContent
                     containerStyle={{
                         flex: 1,
-                        justifyContent: 'center'                        
+                        justifyContent: 'center'
                     }}
                     // containerStyle={{ flex: 1, width: 300 }}
                     isLoading={props.load}
@@ -89,4 +89,76 @@ export const PostCardSkelleton = (props) => {
         </View>
     )
 
+}
+
+export const WebViewSkelleton = (props) => {
+
+    const [width, setWidth] = useState(0);
+
+    return (
+        <>
+        <View style={{
+            padding: 20,
+            backgroundColor: colors.dark,
+            paddingTop: 30
+        }}>
+             <SkeletonContent
+                containerStyle={{
+                    flex: 1,
+                    justifyContent: 'center',
+                }}                
+                // containerStyle={{ flex: 1, width: 300 }}
+                isLoading={true}
+                layout={[
+                    { key: "image", width: 200, height: 30, marginBottom: 6 },
+                ]}
+                animationDirection={'horizontalRight'}
+            >
+            </SkeletonContent>
+        </View>
+        <View
+            onLayout={(event) => {
+                setWidth(event.nativeEvent.layout.width - 20)
+            }}
+            style={{
+                height: 300,
+                backgroundColor: colors.dark,
+                padding: 10
+            }}>
+            <SkeletonContent
+                containerStyle={{
+                    flex: 1,
+                    justifyContent: 'center',
+                }}                
+                // containerStyle={{ flex: 1, width: 300 }}
+                isLoading={true}
+                layout={[
+                    { key: "image", width: width, height: 280, marginBottom: 6 },
+                ]}
+                animationDirection={'horizontalRight'}
+            >
+            </SkeletonContent>
+        </View>
+        <View
+            style={{
+                height: 300,
+                backgroundColor: colors.dark,
+                padding: 10
+            }}>
+            <SkeletonContent
+                containerStyle={{
+                    flex: 1,
+                    justifyContent: 'center',
+                }}                
+                // containerStyle={{ flex: 1, width: 300 }}
+                isLoading={true}
+                layout={[
+                    { key: "image", width: width, height: 280, marginBottom: 6 },
+                ]}
+                animationDirection={'horizontalRight'}
+            >
+            </SkeletonContent>
+        </View>
+        </>
+    )
 }

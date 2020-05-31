@@ -3,10 +3,11 @@ import { useTracked } from '../../service';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ReactNativeParallaxHeader from 'react-native-parallax-header';
 import { View, Text, StyleSheet, Platform, Dimensions, TouchableOpacity, Alert } from 'react-native';
-import { colors, textStyle, containerStyle } from '../../styles';
+import { colors, textStyle } from '../../styles';
+import { Space } from '../../components/containers';
 import moment from 'moment';
 import AsyncStorage from '@react-native-community/async-storage';
-import { Space } from '../../components/containers';
+import { Chip, Button } from 'react-native-paper';
 import HTML from 'react-native-render-html';
 
 const DetailPost = ({ navigation, route: {
@@ -46,12 +47,25 @@ const DetailPost = ({ navigation, route: {
         }
     });
 
-    function getTitle(){
+    function getTitle() {
         const title = data.title.toString().split(' ');
-        if(title.length > 2){
+        if (title.length > 2) {
             return title[0] + ' ' + title[1]
         } else {
             return data.title.length < 2 ? data.author : data.title
+        }
+    }
+
+    function getTags() {
+        const tags = data.tags.split(' ');
+        if (tags.length > 1) {
+            if (tags[0].length < 2) {
+                return false
+            } else {
+                return tags
+            }
+        } else {
+            return false
         }
     }
 
@@ -152,26 +166,73 @@ const DetailPost = ({ navigation, route: {
                     }
                 ]}>{data.title.length < 2 ? 'Image Post' : data.title}</Text>
                 <Text style={[
-                        textStyle.subTitle,
-                        {
-                            color: colors.grey
-                        }
-                    ]}>Posted By : {data.author}</Text>
-                    <Text style={[
-                        textStyle.subTitle,
-                        {
-                            color: colors.grey
-                        }
-                    ]}>Date Posted : {moment(data.published).format('DD/MM/yyyy')}</Text>                    
-                    <View style={{
-                        padding: 10
-                    }}>
+                    textStyle.subTitle,
+                    {
+                        color: colors.grey
+                    }
+                ]}>Posted By : {data.author}</Text>
+                <Text style={[
+                    textStyle.subTitle,
+                    {
+                        color: colors.grey
+                    }
+                ]}>Date Posted : {moment(data.published).format('DD/MM/yyyy')}</Text>
+                <View style={{
+                    padding: 10
+                }}>
                     <Text style={textStyle.subTitle}>Description :</Text>
-                        <HTML html={data.description} imagesMaxWidth={Dimensions.get('window').width} />
-                    </View>
-                    {/* <Text style={textStyle.title}>{data.description}</Text> */}
-                <Text>{JSON.stringify(data)}</Text>
+                    <HTML html={data.description} imagesMaxWidth={Dimensions.get('window').width} />
+                </View>
+                <Text style={[
+                    textStyle.subTitle,
+                    {
+                        color: colors.grey,
+                        margin: 10
+                    }
+                ]}>Tags :</Text>
+                <View style={{
+                    flex: 1,
+                    flexWrap: 'wrap',
+                    flexDirection: 'row'
+                }}>
+                    {
+                        getTags() ?
+                            getTags().map((row, i) => (
+                                <Chip
+                                    key={i.toString()}
+                                    mode={'outlined'}
+                                    style={{
+                                        margin: 2
+                                    }}
+                                    onPress={() => {
+                                        console.log('Pressed')
+                                    }}>
+                                    {
+                                        row
+                                    }
+                                </Chip>
+                            )) : (
+                                <Text style={[
+                                    textStyle.subTitle,
+                                    {
+                                        color: colors.grey
+                                    }
+                                ]}>Tags Not Found</Text>
+                            )
+                    }
+                </View>
+                <Space size={30} />
+                <Button
+                    mode="contained"
+                    onPress={() => {
+                        navigation.navigate('WebView', {                            
+                            link: data.link
+                        });
+                    }}>
+                    visit page
+                    </Button>
             </View>
+
         )
     }
 
@@ -193,6 +254,10 @@ const DetailPost = ({ navigation, route: {
                 containerStyle={styles.container}
                 contentContainerStyle={styles.contentContainer}
                 innerContainerStyle={styles.container}
+            // scrollViewProps={{
+            //     onScrollBeginDrag: () => console.log('onScrollBeginDrag'),
+            //     onScrollEndDrag: () => console.log('onScrollEndDrag'),
+            // }}
             />
         </View>
     );
