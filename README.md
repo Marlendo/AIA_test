@@ -15,3 +15,4 @@ api documentation = https://www.flickr.com/services/feeds/
 
 #
 this project APK has been deployed to playstore but still waiting for verification from playstore
+for temporary you can download this apk at https://drive.google.com/file/d/1r2MTZGGQ6K4hjDB3jnN6gEpve_Tk-Bye/view?usp=sharing
