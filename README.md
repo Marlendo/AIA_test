@@ -5,7 +5,8 @@ api documentation = https://www.flickr.com/services/feeds/
 # Installation
 <p>Node JS Version must <b>12 ++</b></p>
 <p>Install Yarn to your machine https://classic.yarnpkg.com/en/docs/install</p>
-<p> <b>yarn install</b></p>
+<p>clone this project</p>
+<p>yarn install</p>
 <h4>Unit Testing using JEST</h4>
 <p>yarn spec</p>
 <h4>Running Development Build</h4>
