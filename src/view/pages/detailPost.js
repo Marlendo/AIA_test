@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTracked } from '../../service';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ReactNativeParallaxHeader from 'react-native-parallax-header';
@@ -17,6 +17,7 @@ const DetailPost = ({ navigation, route: {
 }) => {
 
     const [state, action] = useTracked();
+    const [drag, setDrag] = useState(false);
     const SCREEN_HEIGHT = Dimensions.get('screen').height;
     const IS_IPHONE_X = SCREEN_HEIGHT === 812 || SCREEN_HEIGHT === 896;
     const STATUS_BAR_HEIGHT = Platform.OS === 'ios' ? (IS_IPHONE_X ? 44 : 20) : 0;
@@ -205,7 +206,7 @@ const DetailPost = ({ navigation, route: {
                                         margin: 2
                                     }}
                                     onPress={() => {
-                                        navigation.navigate('TagsPage', {                            
+                                        navigation.navigate('TagsPage', {
                                             tag: row
                                         });
                                     }}>
@@ -223,16 +224,7 @@ const DetailPost = ({ navigation, route: {
                             )
                     }
                 </View>
-                <Space size={30} />
-                <Button
-                    mode="contained"
-                    onPress={() => {
-                        navigation.navigate('WebView', {                            
-                            link: data.link
-                        });
-                    }}>
-                    visit page
-                    </Button>
+                <Space size={SCREEN_HEIGHT / 2} />
             </View>
 
         )
@@ -256,11 +248,42 @@ const DetailPost = ({ navigation, route: {
                 containerStyle={styles.container}
                 contentContainerStyle={styles.contentContainer}
                 innerContainerStyle={styles.container}
-            // scrollViewProps={{
-            //     onScrollBeginDrag: () => console.log('onScrollBeginDrag'),
-            //     onScrollEndDrag: () => console.log('onScrollEndDrag'),
-            // }}
+                scrollViewProps={{
+                    onScrollBeginDrag: () => {
+                        setDrag(true)
+                    },
+                    onScrollEndDrag: () => {
+                        setDrag(false)
+                    },
+                }}
             />
+            {
+                !drag ? (
+                    <View style={{
+                        position: 'absolute',
+                        bottom: -1,
+                        width: '100%'
+                    }}>
+                        <Button
+                            mode="contained"
+                            style={{
+                                borderRadius: 0,
+                                paddingVertical: 5
+                            }}
+                            onPress={() => {
+                                navigation.navigate('WebView', {
+                                    link: data.link
+                                });
+                            }}>
+                            <Text style={textStyle.title}>
+                                visit page
+                            </Text>
+                        </Button>
+                    </View>
+                ) : (
+                        null
+                    )
+            }
         </View>
     );
 };
