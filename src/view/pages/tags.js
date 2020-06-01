@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FlatList, Alert } from 'react-native';
+import { FlatList, Alert, RefreshControl } from 'react-native';
 import { useTracked } from '../../service';
 import { flickrApi } from '../../service/api';
 import { MainHeaderContainer, Space } from '../../components/containers';
@@ -22,12 +22,20 @@ const TagsPage = ({ navigation, route: {
     const [searchToogle, setSearchToogle] = useState(false);
     const [data, setData] = useState([]);
     const [page, setPage] = useState(1);
-    const [post, setPost] = useState([])
+    const [post, setPost] = useState([]);
+    const [refreshing, setRefreshing] = useState(false);
 
-    async function getData() {
+    async function getData(refresher) {
         setLoad(true)
+        if(refresher){
+            setRefreshing(true)
+            setPage(1)
+        }
         const data = await flickrApi('publicTag', tag)
         if (data) {
+            if(refresher){
+                setRefreshing(false)
+            }
             setLoad(false)
             setData(data.items)
             setPost(paginate(data.items, page))
@@ -118,7 +126,7 @@ const TagsPage = ({ navigation, route: {
     // end of favorite management
 
     useEffect(() => {
-        getData()
+        getData(false)
     }, []);
 
     return (
@@ -175,6 +183,14 @@ const TagsPage = ({ navigation, route: {
                                     }}
                                 />
                             )}
+                            refreshControl={
+                                <RefreshControl
+                                    refreshing={refreshing}
+                                    onRefresh={()=> {
+                                        getData(true)
+                                    }}
+                                />
+                            }
                             onEndReachedThreshold={0.5}
                             onEndReached={() => {
                                 if (!searchToogle) {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FlatList, Alert } from 'react-native';
+import { FlatList, Alert, RefreshControl } from 'react-native';
 import { useTracked } from '../../service';
 import { flickrApi } from '../../service/api';
 import { MainHeaderContainer, Space } from '../../components/containers';
@@ -19,13 +19,21 @@ const Home = ({ navigation }) => {
     const [searchToogle, setSearchToogle] = useState(false);
     const [data, setData] = useState([]);
     const [page, setPage] = useState(1);
-    const [post, setPost] = useState([])
+    const [post, setPost] = useState([]);
+    const [refreshing, setRefreshing] = useState(false);
 
-    async function getData() {
+    async function getData(refresher) {
         setLoad(true)
+        if(refresher){
+            setRefreshing(true)
+            setPage(1)
+        }
         const data = await flickrApi('public')
         if (data) {
             setLoad(false)
+            if(refresher){
+                setRefreshing(false)
+            }
             setData(data.items)
             setPost(paginate(data.items, page))
         }
@@ -115,7 +123,7 @@ const Home = ({ navigation }) => {
     // end of favorite management
 
     useEffect(() => {
-        getData()
+        getData(false)
     }, []);
 
     return (
@@ -171,6 +179,14 @@ const Home = ({ navigation }) => {
                                     }}
                                 />
                             )}
+                            refreshControl={
+                                <RefreshControl
+                                    refreshing={refreshing}
+                                    onRefresh={()=> {
+                                        getData(true)
+                                    }}
+                                />
+                            }
                             onEndReachedThreshold={0.5}
                             onEndReached={() => {
                                 if (!searchToogle) {
